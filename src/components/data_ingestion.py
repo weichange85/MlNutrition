@@ -3,11 +3,13 @@ import os, sys
 import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from src.logger import logging
+from src.exception import CustomException
 import PIL
 import PIL.Image
 import tensorflow as tf
 import tensorflow_datasets as tfds
 from dataclasses import dataclass
+import pathlib
 
 
 @dataclass
@@ -23,9 +25,17 @@ class DataIngestion:
     def initiate_data_ingestion(self):
         logging.info("Enter Data Ingestion Method")
         try:
-            pass
-        except:
-            pass
+            data_dir = pathlib.Path("notebook\data")
+            logging.info("Finished loading dataset")
+
+
+            avocado = list(data_dir.glob('Avocado/*'))
+            print(os.path.exists('notebook\\data\\Avocado\\Avocado_0.jpg'))
+            PIL.Image.open(str(avocado[0]))
+
+
+        except Exception as e:
+            raise CustomException(e, sys)
 
 
 

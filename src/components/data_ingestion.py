@@ -28,12 +28,11 @@ class DataIngestion:
             data_dir = pathlib.Path("notebook\data")
             logging.info("Finished loading dataset")
 
+            os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
 
-            avocado = list(data_dir.glob('Avocado/*'))
-            print(os.path.exists('notebook\\data\\Avocado\\Avocado_0.jpg'))
-            PIL.Image.open(str(avocado[0]))
+            logging.info("Train test split initiated")
 
-
+            
         except Exception as e:
             raise CustomException(e, sys)
 

@@ -11,6 +11,9 @@ import tensorflow_datasets as tfds
 from dataclasses import dataclass
 import pathlib
 
+from model_trainer import modelTrainerConfig
+from model_trainer import ModelTrainer
+
 
 @dataclass
 class DataIngestionConfig:
@@ -56,7 +59,9 @@ class DataIngestion:
 
             return(
                 train_ds,
-                val_ds
+                val_ds,
+                img_height,
+                img_width
             )
             
 
@@ -71,4 +76,16 @@ class DataIngestion:
 
 if __name__ == "__main__":
     obj=DataIngestion()
-    obj.initiate_data_ingestion()
+    train_ds, val_ds, img_height, img_width = obj.initiate_data_ingestion()
+
+    model_trainer = ModelTrainer(train_ds=train_ds, val_ds=val_ds)
+    model = model_trainer.initiate_model_trainer(img_height=180, img_width=180)
+    img_array = model_trainer.load_and_process(
+        data_path="C:\Projects\MlNutrition\prediction_data\pears.jpg",
+        img_height=180,
+        img_width=180
+    )
+    prediction_class, score = model_trainer.make_prediction(model=model, img_array=img_array)
+
+
+    print(f"This image most likely belongs to {prediction_class} with a {score:.2f} percent confidence.")
